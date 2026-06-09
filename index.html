@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONP Digital — Panel de Análisis y Decisión | Entregable 4</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:    #0D1B2A;
+  --ink:     #1A2B3C;
+  --slate:   #2C4A6E;
+  --steel:   #3E6B9A;
+  --sky:     #5B9BD5;
+  --ice:     #C8DDEF;
+  --cream:   #F5F0E8;
+  --sand:    #E8DFD0;
+  --amber:   #D4862A;
+  --amber-l: #F5C97A;
+  --rust:    #B84C2E;
+  --rust-l:  #E8967A;
+  --sage:    #3A7D5C;
+  --sage-l:  #8EC9A8;
+  --gold:    #C9A227;
+  --text:    #1A2232;
+  --muted:   #5A6880;
+  --border:  rgba(44,74,110,.15);
+  --r:       8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HERO ──────────────────────────────────────────────────── */
+.hero {
+  background: var(--navy);
+  padding: 56px 48px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 80% 30%, rgba(91,155,213,.18) 0%, transparent 55%),
+    radial-gradient(circle at 10% 80%, rgba(58,125,92,.12) 0%, transparent 45%);
+}
+.hero-inner { position: relative; max-width: 1200px; margin: 0 auto; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(91,155,213,.15); border: 1px solid rgba(91,155,213,.3);
+  color: var(--ice); font-size: 11px; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 24px;
+}
+.hero-tag span { width: 6px; height: 6px; background: var(--sky); border-radius: 50%; }
+h1.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 4vw, 52px);
+  color: #fff;
+  line-height: 1.12;
+  max-width: 700px;
+  margin-bottom: 16px;
+}
+h1.hero-title em { color: var(--amber-l); font-style: italic; }
+.hero-sub { color: rgba(200,221,239,.65); font-size: 14px; font-weight: 300; max-width: 560px; margin-bottom: 36px; }
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 24px;
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: 24px;
+}
+.meta-item { }
+.meta-label { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: rgba(200,221,239,.5); margin-bottom: 4px; }
+.meta-value { font-size: 13px; font-weight: 500; color: var(--ice); }
+
+/* ── NAV TABS ───────────────────────────────────────────────── */
+.nav-bar {
+  background: var(--ink);
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; gap: 2px; padding: 0 16px;
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+.nav-tab {
+  flex-shrink: 0;
+  padding: 14px 20px;
+  font-size: 12px; font-weight: 500; letter-spacing: .04em;
+  color: rgba(200,221,239,.5);
+  cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all .2s; white-space: nowrap;
+  text-decoration: none; display: block;
+}
+.nav-tab:hover { color: var(--ice); }
+.nav-tab.active { color: var(--sky); border-bottom-color: var(--sky); }
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.page { max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+.section { display: none; }
+.section.active { display: block; }
+.section-h {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px; color: var(--navy);
+  margin-bottom: 8px;
+}
+.section-sub { font-size: 13px; color: var(--muted); margin-bottom: 32px; max-width: 640px; }
+
+/* ── KPI CARDS ──────────────────────────────────────────────── */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 36px; }
+.kpi {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 22px;
+  position: relative; overflow: hidden;
+}
+.kpi::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.kpi.blue::before  { background: var(--sky); }
+.kpi.amber::before { background: var(--amber); }
+.kpi.sage::before  { background: var(--sage); }
+.kpi.rust::before  { background: var(--rust); }
+.kpi.gold::before  { background: var(--gold); }
+.kpi-icon { font-size: 22px; margin-bottom: 10px; }
+.kpi-val  { font-family: 'JetBrains Mono', monospace; font-size: 28px; font-weight: 600; color: var(--navy); line-height: 1; margin-bottom: 4px; }
+.kpi-lbl  { font-size: 12px; color: var(--muted); }
+
+/* ── CARDS GENÉRICOS ────────────────────────────────────────── */
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+.card-h {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px; color: var(--navy); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.card-h .ico { font-size: 18px; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+
+/* ── SEMÁFORO DE RIESGO ─────────────────────────────────────── */
+.risk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 14px; }
+.risk-item {
+  border-radius: var(--r); padding: 16px 18px;
+  border-left: 4px solid;
+  background: #fff; border-color: var(--border);
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.risk-item.alto  { border-color: var(--rust);  background: #FFF5F3; }
+.risk-item.medio { border-color: var(--amber); background: #FFFBF2; }
+.risk-item.bajo  { border-color: var(--sage);  background: #F3FBF7; }
+.risk-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.risk-item.alto  .risk-dot { background: var(--rust); }
+.risk-item.medio .risk-dot { background: var(--amber); }
+.risk-item.bajo  .risk-dot { background: var(--sage); }
+.risk-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.risk-desc  { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.risk-tag   { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-top: 6px; }
+.risk-item.alto  .risk-tag { background: var(--rust-l); color: #7A1C0A; }
+.risk-item.medio .risk-tag { background: var(--amber-l); color: #7A4A00; }
+.risk-item.bajo  .risk-tag { background: var(--sage-l); color: #1A4A30; }
+
+/* ── PROGRESS BARS ──────────────────────────────────────────── */
+.prog-row { margin-bottom: 14px; }
+.prog-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+.prog-label { font-weight: 500; color: var(--text); }
+.prog-val   { font-family: 'JetBrains Mono', monospace; color: var(--muted); font-size: 11px; }
+.prog-bg    { height: 7px; background: var(--sand); border-radius: 4px; overflow: hidden; }
+.prog-fill  { height: 100%; border-radius: 4px; transition: width 1.2s cubic-bezier(.22,.68,0,1.2); }
+
+/* ── TIMELINE ───────────────────────────────────────────────── */
+.timeline { position: relative; }
+.timeline::before {
+  content: ''; position: absolute; left: 22px; top: 8px; bottom: 8px; width: 2px;
+  background: linear-gradient(to bottom, var(--sky), var(--sage));
+}
+.tl-item { display: flex; gap: 20px; margin-bottom: 28px; position: relative; }
+.tl-dot {
+  width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+  margin-top: 4px; z-index: 1;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px;
+}
+.tl-dot.f1   { background: var(--sky);   box-shadow: 0 0 0 2px var(--sky); }
+.tl-dot.f2   { background: var(--sage);  box-shadow: 0 0 0 2px var(--sage); }
+.tl-dot.tx   { background: var(--amber); box-shadow: 0 0 0 2px var(--amber); }
+.tl-dot.prep { background: var(--gold);  box-shadow: 0 0 0 2px var(--gold); }
+.tl-body { flex: 1; }
+.tl-date { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.tl-title { font-weight: 600; font-size: 14px; color: var(--navy); margin-bottom: 4px; }
+.tl-detail { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── TABLE ──────────────────────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  background: var(--navy); color: #fff;
+  padding: 10px 14px; text-align: left;
+  font-size: 11px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase;
+}
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--cream); }
+.badge {
+  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .05em;
+  text-transform: uppercase; padding: 2px 8px; border-radius: 20px;
+}
+.badge-f1   { background: var(--ice);    color: var(--slate); }
+.badge-f2   { background: var(--sage-l); color: #1A4A30; }
+.badge-tx   { background: var(--amber-l); color: #7A4A00; }
+.badge-alto { background: #FFD7CE; color: #8B1C0A; }
+.badge-med  { background: #FDEFC7; color: #7A4A00; }
+.badge-ok   { background: #C5EDDC; color: #1A4A30; }
+
+/* ── DECISION MATRIX ────────────────────────────────────────── */
+.matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.mat-cell {
+  border-radius: var(--r); padding: 20px 22px;
+  position: relative; overflow: hidden;
+}
+.mat-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.mat-cell.go   { background: #EAF7F0; border: 1.5px solid var(--sage); }
+.mat-cell.warn { background: #FFFBEF; border: 1.5px solid var(--gold); }
+.mat-cell.risk { background: #FFF4F2; border: 1.5px solid var(--rust); }
+.mat-cell.info { background: #EDF5FC; border: 1.5px solid var(--sky); }
+.mat-cell.go   .mat-label { color: var(--sage); }
+.mat-cell.warn .mat-label { color: var(--amber); }
+.mat-cell.risk .mat-label { color: var(--rust); }
+.mat-cell.info .mat-label { color: var(--steel); }
+.mat-item { font-size: 13px; color: var(--text); margin-bottom: 7px; display: flex; gap: 8px; line-height: 1.4; }
+.mat-item::before { content: '—'; opacity: .4; flex-shrink: 0; }
+
+/* ── ACTORS MAP ─────────────────────────────────────────────── */
+.actor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; }
+.actor {
+  border-radius: var(--r); padding: 16px;
+  border: 1px solid var(--border); background: #fff;
+  transition: transform .15s, box-shadow .15s;
+}
+.actor:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.07); }
+.actor-name { font-weight: 600; font-size: 13px; color: var(--navy); margin-bottom: 6px; }
+.actor-role { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.actor-stat { display: flex; gap: 6px; flex-wrap: wrap; }
+.a-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 20px; }
+.a-aliado  { background: #D0F0E0; color: #1A4A30; }
+.a-neutral { background: #E5EAF0; color: #3A4A5C; }
+.a-oposit  { background: #FFE0D8; color: #8B1C0A; }
+
+/* ── INDICATORS ─────────────────────────────────────────────── */
+.ind-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; }
+.ind-card {
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--r); padding: 18px 20px;
+}
+.ind-dim  { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--steel); margin-bottom: 8px; }
+.ind-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.ind-tool { font-size: 12px; color: var(--muted); }
+
+/* ── RECOMMENDATION CARDS ───────────────────────────────────── */
+.rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; }
+.rec {
+  background: #fff; border-radius: var(--r);
+  border: 1px solid var(--border); padding: 20px 22px;
+  border-top: 4px solid;
+  transition: transform .15s, box-shadow .15s;
+}
+.rec:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.07); }
+.rec.p1 { border-top-color: var(--rust); }
+.rec.p2 { border-top-color: var(--amber); }
+.rec.p3 { border-top-color: var(--sky); }
+.rec.p4 { border-top-color: var(--sage); }
+.rec-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+.rec-title { font-weight: 600; font-size: 14px; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+.rec-body { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.rec-tag { margin-top: 12px; }
+
+/* ── CHECKLIST ──────────────────────────────────────────────── */
+.check-list { list-style: none; }
+.check-list li {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 13px; color: var(--text); padding: 8px 0;
+  border-bottom: 1px solid var(--border); line-height: 1.5;
+}
+.check-list li:last-child { border-bottom: none; }
+.check-ico { flex-shrink: 0; margin-top: 1px; font-size: 15px; }
+
+/* ── PILL TABS ──────────────────────────────────────────────── */
+.pill-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.pill {
+  padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all .2s;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+}
+.pill.active   { background: var(--navy); color: #fff; border-color: var(--navy); }
+.pill:hover:not(.active) { border-color: var(--slate); color: var(--text); }
+
+/* ── ACTIVIDAD DETALLE ──────────────────────────────────────── */
+.act-table { display: none; }
+.act-table.active { display: block; }
+
+/* ── DIVIDER ────────────────────────────────────────────────── */
+.divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+/* ── VERDICT BOX ────────────────────────────────────────────── */
+.verdict {
+  border-radius: 12px; padding: 24px 28px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--slate) 100%);
+  color: #fff; margin-bottom: 24px;
+}
+.verdict-title { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 12px; }
+.verdict-body { font-size: 13px; line-height: 1.7; color: rgba(200,221,239,.85); }
+.verdict-body strong { color: var(--amber-l); }
+
+/* ── GAP ANALYSIS ───────────────────────────────────────────── */
+.gap-row {
+  display: grid; grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 12px; margin-bottom: 12px; align-items: start;
+}
+.gap-row.header { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.gap-cell {
+  background: #fff; border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px;
+  font-size: 12px; color: var(--text); line-height: 1.5;
+}
+.gap-cell.tdr  { border-left: 3px solid var(--sky); }
+.gap-cell.inf  { border-left: 3px solid var(--sage); }
+.gap-cell.gap  { border-left: 3px solid var(--rust); }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero { padding: 36px 20px 28px; }
+  .two-col, .three-col, .matrix, .gap-row { grid-template-columns: 1fr; }
+  .page { padding: 24px 16px 60px; }
+}
+
+/* ── ANIMATIONS ─────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.section.active > * {
+  animation: fadeUp .35s ease both;
+}
+.section.active > *:nth-child(2) { animation-delay: .05s; }
+.section.active > *:nth-child(3) { animation-delay: .10s; }
+.section.active > *:nth-child(4) { animation-delay: .15s; }
+.section.active > *:nth-child(5) { animation-delay: .20s; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag"><span></span> Análisis Ejecutivo de Decisión</div>
+    <h1 class="hero-title">Entregable 4 · <em>Plan de Gestión del Cambio</em> ONP Digital</h1>
+    <p class="hero-sub">Análisis integrado del informe entregado y los Términos de Referencia (TDR) para apoyo a la toma de decisiones estratégicas.</p>
+    <div class="hero-meta">
+      <div class="meta-item"><div class="meta-label">Proyecto</div><div class="meta-value">PE-L1290 · BID / UE 003</div></div>
+      <div class="meta-item"><div class="meta-label">Consultora</div><div class="meta-value">Helena Rosa Pinilla García</div></div>
+      <div class="meta-item"><div class="meta-label">Contrato</div><div class="meta-value">C25-2026-ONP-BID · Producto 4/4</div></div>
+      <div class="meta-item"><div class="meta-label">Vigencia servicio</div><div class="meta-value">1 260 días calendario</div></div>
+      <div class="meta-item"><div class="meta-label">Presupuesto total</div><div class="meta-value">S/ 1 030 944 sin IGV</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-tab active" onclick="showTab('resumen')" href="#">① Resumen ejecutivo</a>
+    <a class="nav-tab" onclick="showTab('brecha')" href="#">② TDR vs Entregable</a>
+    <a class="nav-tab" onclick="showTab('actores')" href="#">③ Mapa de actores</a>
+    <a class="nav-tab" onclick="showTab('riesgos')" href="#">④ Riesgos</a>
+    <a class="nav-tab" onclick="showTab('actividades')" href="#">⑤ Actividades</a>
+    <a class="nav-tab" onclick="showTab('indicadores')" href="#">⑥ Indicadores</a>
+    <a class="nav-tab" onclick="showTab('decision')" href="#">⑦ Decisión</a>
+  </div>
+</nav>
+
+<div class="page">
+
+<!-- ─────────────────────────────────────── RESUMEN ─── -->
+<section id="resumen" class="section active">
+  <h2 class="section-h">Resumen ejecutivo</h2>
+  <p class="section-sub">Estado actual del servicio de Gestión del Cambio, cobertura de objetivos y hallazgos clave del Entregable 4.</p>
+
+  <div class="kpi-grid">
+    <div class="kpi blue">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-val">4/4</div>
+      <div class="kpi-lbl">Entregable · Producto final de la consultoría</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-val">6</div>
+      <div class="kpi-lbl">Públicos diferenciados por nivel de impacto</div>
+    </div>
+    <div class="kpi sage">
+      <div class="kpi-icon">📅</div>
+      <div class="kpi-val">42</div>
+      <div class="kpi-lbl">Meses de despliegue (Jul 2026 – Dic 2029)</div>
+    </div>
+    <div class="kpi rust">
+      <div class="kpi-icon">⚠️</div>
+      <div class="kpi-val">3</div>
+      <div class="kpi-lbl">Riesgos críticos sin resolver al cierre</div>
+    </div>
+    <div class="kpi gold">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-val">44</div>
+      <div class="kpi-lbl">Entregables contractuales comprometidos</div>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="verdict-title">Diagnóstico global del Entregable 4</div>
+    <div class="verdict-body">
+      El Entregable 4 constituye el cierre de la fase de diseño de la consultoría. Presenta <strong>tres componentes sustantivos</strong>: la estrategia y ruta de despliegue del Plan GC, los informes de actividades transversales (Kick Off y taller de equipo) y los insumos para el documento equivalente de despliegue (presupuesto, TDR, indicadores y fichas técnicas).<br><br>
+      La calidad metodológica es alta: marcos teóricos sólidos (Kotter, Bridges, ADKAR), segmentación de públicos bien argumentada y una narrativa institucional de ONP Digital detallada. <strong>El principal riesgo decisional es que el entregable consigna la hoja de ruta operativa sin que la gobernanza interna de la UE 003 esté formalmente activada</strong>, lo que podría comprometer el inicio del despliegue. Las recomendaciones incluidas en el informe son pertinentes y deben convertirse en acciones concretas antes de julio 2026.
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-h"><span class="ico">✅</span> Objetivos cubiertos por el entregable</div>
+      <ul class="check-list">
+        <li><span class="check-ico">✅</span> Asistencia técnica y acompañamiento a la UE 003 en GC</li>
+        <li><span class="check-ico">✅</span> Elaboración de insumos para documento equivalente (fase despliegue)</li>
+        <li><span class="check-ico">✅</span> Estrategia y ruta de despliegue del Plan GC</li>
+        <li><span class="check-ico">✅</span> Kick Off a directores y ejecutivos ONP (11 feb 2026)</li>
+        <li><span class="check-ico">✅</span> Taller GC para equipo proyecto UE 003 (19 feb 2026)</li>
+        <li><span class="check-ico">✅</span> Organigrama editable ONP Digital</li>
+        <li><span class="check-ico">✅</span> Modelo de relacionamiento UE3 – ONP</li>
+        <li><span class="check-ico">✅</span> TDR de despliegue para contratación</li>
+        <li><span class="check-ico">✅</span> Presupuesto de despliegue (S/ 1 030 944)</li>
+        <li><span class="check-ico">✅</span> Indicadores, cronograma y fichas técnicas del Plan GC</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-h"><span class="ico">⚡</span> Hallazgos clave del Kick Off (11-feb-2026)</div>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px;font-weight:600;color:var(--navy);margin-bottom:6px;">6 habilitadores de cooperación identificados</div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Gobernanza y claridad organizacional</span><span class="prog-val">Crítico</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:90%;background:var(--rust)"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Planificación y trazabilidad</span><span class="prog-val">Alto</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:80%;background:var(--amber)"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Rituales de coordinación</span><span class="prog-val">Alto</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:75%;background:var(--amber)"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Comunicación e integración operativa</span><span class="prog-val">Medio</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:65%;background:var(--sky)"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Liderazgo y sostenibilidad</span><span class="prog-val">Medio</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:60%;background:var(--sky)"></div></div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-header"><span class="prog-label">Capacidades y foco en usuario</span><span class="prog-val">Medio</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:55%;background:var(--sage)"></div></div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px;">Taller de equipo (19-feb): <strong style="color:var(--navy)">mayoría en etapa "Aceptación"</strong> de la curva de Bridges — clima emocional favorable para el despliegue.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="ico">🗓️</span> Línea de tiempo crítica del despliegue</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot prep"></div>
+        <div class="tl-body">
+          <div class="tl-date">Feb – Jun 2026 · Acciones preparatorias (NOW)</div>
+          <div class="tl-title">Activar gobernanza interna y seleccionar proveedor de despliegue</div>
+          <div class="tl-detail">Definir equipo GC UE 003 · Validar cronograma real · Taller de alineamiento · TDR publicado para contratación · Inicio proceso de selección.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot f1"></div>
+        <div class="tl-body">
+          <div class="tl-date">Jul – Dic 2026 · Fase 1 (Diseño y levantamiento)</div>
+          <div class="tl-title">Ruta regular + Iniciativas adelantadas (PAST, Chatbot, Historias Laborales)</div>
+          <div class="tl-detail">Kick offs · Talleres ágiles · Coaching grupal · Campañas · Cascadeo · Espacios de diálogo OTI · Acompañamiento equipo UE 003.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot f2"></div>
+        <div class="tl-body">
+          <div class="tl-date">Ene 2027 – Dic 2029 · Fase 2 (Por hitos)</div>
+          <div class="tl-title">Construcción, pruebas y despliegue del SIIP por hitos</div>
+          <div class="tl-detail">36 meses · Kick offs por hito · Coaching 40 sesiones · Cascadeo 30 reuniones/áreas · Team buildings OTI · Talleres bienestar · Integración Full Day Equipo Proyecto.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot tx"></div>
+        <div class="tl-body">
+          <div class="tl-date">Transversal Jul 2026 – Dic 2029</div>
+          <div class="tl-title">Coordinación, seguimiento y ajuste continuo</div>
+          <div class="tl-detail">Reuniones 3×/semana · Viajes a sedes regionales (La Libertad, Piura, Arequipa, Lambayeque, Junín, Ica) · Informes mensuales (entregables 2–43).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────── BRECHA ─── -->
+<section id="brecha" class="section">
+  <h2 class="section-h">Análisis TDR vs Entregable</h2>
+  <p class="section-sub">Correspondencia entre las actividades exigidas en los Términos de Referencia y lo efectivamente reportado en el Entregable 4. Identificación de brechas.</p>
+
+  <div class="gap-row header">
+    <div>Actividad / Requisito TDR</div>
+    <div>Estado en Entregable 4</div>
+    <div>Brecha / Alerta</div>
+  </div>
+
+  <!-- Diseño -->
+  <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px;">FASE 1 · Diseño y levantamiento (Ruta regular)</div>
+  <div class="gap-row"><div class="gap-cell tdr">Kick Off inicial (10 sesiones, 1h c/u)</div><div class="gap-cell inf">✅ Metodología y fichas diseñadas. Kick Off ejecutivo realizado (11-feb). TDR contempla 10 sesiones con áreas core.</div><div class="gap-cell gap">No se reportan las 10 sesiones específicas por área. Pendiente de ejecución en Fase 1.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Taller metodologías ágiles (10 talleres, 2h c/u)</div><div class="gap-cell inf">✅ Ficha técnica diseñada. Metodología de facilitación definida.</div><div class="gap-cell gap">Ejecución de los 10 talleres pendiente de inicio.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Coaching grupal (12 sesiones, 1h c/u)</div><div class="gap-cell inf">✅ Diseñado; propuesta de intervención documentada para líderes UE y áreas core.</div><div class="gap-cell gap">Ninguna sesión ejecutada aún. Requiere proveedor contratado vía TDR.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Reuniones informativas institucionales (6, virtual)</div><div class="gap-cell inf">✅ Diseñadas. Indicadores e instrumentos definidos.</div><div class="gap-cell gap">0 ejecutadas. Dependen de cronograma ajustado.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">6 Campañas de sensibilización (5-6 piezas c/u)</div><div class="gap-cell inf">✅ Estrategia comunicacional diseñada. Narrative de ONP Digital finalizada.</div><div class="gap-cell gap">Sin piezas producidas ni distribuidas. Requiere especialista en comunicaciones.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Cascadeo por líderes (6 reuniones + encuestas)</div><div class="gap-cell inf">✅ Metodología documentada. Ficha técnica completa.</div><div class="gap-cell gap">Ejecución 0%. Encuestas no diseñadas aún.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Espacios de diálogo OTI (8 espacios)</div><div class="gap-cell inf">✅ Metodología y ficha técnica incluidas.</div><div class="gap-cell gap">Sin ejecución. OTI identificada como área con riesgo de resistencia.</div></div>
+
+  <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:20px 0 8px;">FASE 1 · Iniciativas adelantadas</div>
+  <div class="gap-row"><div class="gap-cell tdr">Sesiones de acompañamiento (12, 1h)</div><div class="gap-cell inf">✅ Fichas técnicas incluidas. Público definido (PAST, Chatbot, Historias Laborales).</div><div class="gap-cell gap">Pendiente de ejecución. Estado de avance de iniciativas no reportado.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Talleres GC, habilidades blandas, liderazgo (4 c/u)</div><div class="gap-cell inf">✅ Todos diseñados con fichas técnicas completas.</div><div class="gap-cell gap">Ninguno ejecutado. Requieren confirmación de hito de inicio.</div></div>
+
+  <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:20px 0 8px;">FASE 2 · Construcción por hitos (2027-2029)</div>
+  <div class="gap-row"><div class="gap-cell tdr">20 Kick offs, 20 talleres ágiles, 40 coaching (fases 2)</div><div class="gap-cell inf">✅ Ruta metodológica del Bloque 3 establece lógica de construcción por hito.</div><div class="gap-cell gap">Diseño sujeto a definición final de hitos del SIIP. Riesgo de desalineación si los hitos se retrasan.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">15 talleres GC, 15 habilidades blandas, 15 liderazgo</div><div class="gap-cell inf">✅ Fichas técnicas incluidas en Fase 2.</div><div class="gap-cell gap">Activación condicional a resultados de espacios de diálogo y encuestas.</div></div>
+
+  <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:20px 0 8px;">TRANSVERSAL Y EQUIPO DE PROYECTO</div>
+  <div class="gap-row"><div class="gap-cell tdr">Reuniones coordinación equipo GC (3×/semana)</div><div class="gap-cell inf">✅ Documentadas. Reuniones de estatus semanales mencionadas en el informe.</div><div class="gap-cell gap">Sin reporte cuantitativo de sesiones realizadas durante la consultoría diseño.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Team buildings equipo proyecto (12 talleres, 4h)</div><div class="gap-cell inf">✅ Diseñados con fichas técnicas.</div><div class="gap-cell gap">No ejecutados. Taller realizado el 19-feb es de sensibilización, no team building formal.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Assessment de competencias + plan de desarrollo</div><div class="gap-cell inf">✅ Incluido en ficha técnica. Recomendado como acción inmediata del Plan.</div><div class="gap-cell gap">Pendiente de ejecución. El taller del 19-feb generó insumos pero no el assessment formal.</div></div>
+  <div class="gap-row"><div class="gap-cell tdr">Informe final (Entregable 44)</div><div class="gap-cell inf">⏳ Pendiente. El E4 es el último de la etapa diseño; los entregables 2–43 son mensuales de ejecución.</div><div class="gap-cell gap">El E44 cierra el servicio. Se requiere proveedor de despliegue para generar entregables 2-44.</div></div>
+</section>
+
+<!-- ─────────────────────────────────────── ACTORES ─── -->
+<section id="actores" class="section">
+  <h2 class="section-h">Mapa de actores y criticidad</h2>
+  <p class="section-sub">Identificación de actores clave según posición frente al proyecto (aliados, neutrales, opositores) y nivel de influencia.</p>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-h"><span class="ico">📊</span> Resultados del mapa de criticidad (validado en taller 19-feb-2026)</div>
+    <div class="three-col" style="text-align:center;margin-top:8px;">
+      <div style="padding:20px;background:#EAF7F0;border-radius:8px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:600;color:var(--sage)">18</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Aliados (Directores/Equipos)</div>
+      </div>
+      <div style="padding:20px;background:#F0F4F8;border-radius:8px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:600;color:var(--slate)">6</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Neutrales</div>
+      </div>
+      <div style="padding:20px;background:#FFF4F2;border-radius:8px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:600;color:var(--rust)">15</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Opositores / Haters</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px;">⚠️ <strong style="color:var(--rust)">38% de los actores son opositores o "haters"</strong> — proporción significativa que requiere estrategias diferenciadas de gestión antes del despliegue.</p>
+  </div>
+
+  <div class="actor-grid">
+    <!-- Directores / Alta dirección -->
+    <div class="actor">
+      <div class="actor-name">Alta Dirección ONP</div>
+      <div class="actor-role">Directores y Ejecutivos — tomadores de decisión</div>
+      <div class="actor-stat">
+        <span class="a-tag a-aliado">10 aliados</span>
+        <span class="a-tag a-neutral">5 neutrales</span>
+        <span class="a-tag a-oposit">6 opositores</span>
+      </div>
+    </div>
+    <div class="actor">
+      <div class="actor-name">UE 003</div>
+      <div class="actor-role">Equipo Proyecto — implementadores directos</div>
+      <div class="actor-stat"><span class="a-tag a-aliado">Mayoritariamente en "Aceptación"</span></div>
+    </div>
+    <div class="actor">
+      <div class="actor-name">Áreas Core (DPR + DPE)</div>
+      <div class="actor-role">Dirección de Producción y Prestaciones — impacto alto</div>
+      <div class="actor-stat"><span class="a-tag a-neutral">Diagnóstico en proceso</span></div>
+    </div>
+    <div class="actor">
+      <div class="actor-name">OTI</div>
+      <div class="actor-role">Oficina Tecnologías de Información — sostenibilidad técnica</div>
+      <div class="actor-stat"><span class="a-tag a-oposit">Riesgo resistencia</span><span class="a-tag a-aliado">Espacios de diálogo previstos</span></div>
+    </div>
+    <div class="actor">
+      <div class="actor-name">OIP</div>
+      <div class="actor-role">Oficina Ingeniería de Procesos — validación metodológica</div>
+      <div class="actor-stat"><span class="a-tag a-neutral">Perfil técnico</span></div>
+    </div>
+    <div class="actor">
+      <div class="actor-name">Áreas Transversales</div>
+      <div class="actor-role">Operación — impacto indirecto, alto volumen</div>
+      <div class="actor-stat"><span class="a-tag a-neutral">Info y alineamiento requerido</span></div>
+    </div>
+    <div class="actor">
+      <div class="actor-name">Equipos de iniciativas</div>
+      <div class="actor-role">PAST, Chatbot, Historias Laborales</div>
+      <div class="actor-stat"><span class="a-tag a-aliado">Participantes tempranos</span></div>
+    </div>
+    <div class="actor">
+      <div class="actor-name">Asegurados ONP</div>
+      <div class="actor-role">Usuario final — externo</div>
+      <div class="actor-stat"><span class="a-tag a-aliado">Beneficiario directo</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <div class="card-h"><span class="ico">🎯</span> Estrategias diferenciadas por actor</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Actor</th><th>Posición</th><th>Estrategia GC recomendada</th><th>Prioridad</th></tr></thead>
+      <tbody>
+        <tr><td>6 Directores opositores</td><td><span class="badge badge-alto">Opositor</span></td><td>Entrevistas individuales · Espacios de escucha · Involucrar en validaciones clave</td><td>🔴 Urgente</td></tr>
+        <tr><td>9 Equipos "Haters"</td><td><span class="badge badge-alto">Opositor</span></td><td>Talleres GC · Espacios de diálogo segmentados · Gestión de resistencias</td><td>🔴 Urgente</td></tr>
+        <tr><td>5 Directores neutrales</td><td><span class="badge badge-med">Neutral</span></td><td>Reuniones informativas · Cascadeo · Demostración de beneficios concretos</td><td>🟡 Medio plazo</td></tr>
+        <tr><td>OTI</td><td><span class="badge badge-med">Riesgo latente</span></td><td>Espacios de diálogo tempranos · Team buildings · Talleres bienestar</td><td>🟡 Prioritario</td></tr>
+        <tr><td>UE 003</td><td><span class="badge badge-ok">Aliado</span></td><td>Capitalizar "aceptación" · Taller alineamiento · Plan fortalecimiento</td><td>🟢 Inmediato</td></tr>
+        <tr><td>10 Directores aliados</td><td><span class="badge badge-ok">Aliado</span></td><td>Activar como agentes de cambio · Cascadeo · Visibilizar liderazgo</td><td>🟢 Aprovechar</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────── RIESGOS ─── -->
+<section id="riesgos" class="section">
+  <h2 class="section-h">Análisis de riesgos</h2>
+  <p class="section-sub">Riesgos identificados a partir de los hallazgos del entregable, los TDR y el contexto del proyecto. Clasificados por nivel de impacto.</p>
+
+  <div style="margin-bottom:14px;display:flex;gap:12px;flex-wrap:wrap;font-size:12px;">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--rust);display:inline-block;"></span> Alto</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--amber);display:inline-block;"></span> Medio</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:10px;height:10px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Bajo</span>
+  </div>
+
+  <div class="risk-grid">
+    <div class="risk-item alto">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">Gobernanza interna UE 003 no formalizada</div>
+        <div class="risk-desc">No se ha designado formalmente el equipo ni el líder de GC dentro de la UE 003. Sin esta estructura, el despliegue no puede iniciarse en julio 2026.</div>
+        <span class="risk-tag">Crítico · Acción inmediata</span>
+      </div>
+    </div>
+    <div class="risk-item alto">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">Proceso de contratación del proveedor de despliegue no iniciado</div>
+        <div class="risk-desc">El TDR está listo, pero sin proceso de selección activo el servicio de despliegue (42 meses / 44 entregables) no puede comenzar en julio. El plazo de 1 260 días ya está corriendo contractualmente.</div>
+        <span class="risk-tag">Crítico · Urgente</span>
+      </div>
+    </div>
+    <div class="risk-item alto">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">38% de actores en posición opositora</div>
+        <div class="risk-desc">6 directores y 9 equipos identificados como opositores/"haters" sin estrategias de gestión individualizadas activas. Pueden comprometer la adopción desde el inicio.</div>
+        <span class="risk-tag">Crítico · Plan diferenciado requerido</span>
+      </div>
+    </div>
+    <div class="risk-item medio">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">Desalineación entre hitos SIIP y cronograma GC</div>
+        <div class="risk-desc">El cronograma de Fase 2 es referencial. Si los hitos técnicos del SIIP se retrasan, las actividades GC asociadas quedan sin ancla temporal y pueden perder efectividad.</div>
+        <span class="risk-tag">Medio · Monitoreo mensual</span>
+      </div>
+    </div>
+    <div class="risk-item medio">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">Rotación del equipo consultor / de la UE</div>
+        <div class="risk-desc">El mismo informe señala la "continuidad del equipo asignado" como habilitador crítico. La rotación en proyectos BID de largo aliento es frecuente y puede reiniciar ciclos de aprendizaje.</div>
+        <span class="risk-tag">Medio · Gestión contractual</span>
+      </div>
+    </div>
+    <div class="risk-item medio">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">Iniciativas adelantadas sin cronograma confirmado</div>
+        <div class="risk-desc">PAST, Chatbot e Historias Laborales tienen actividades GC diseñadas pero su estado de avance técnico no está reportado en el E4. Si se retrasan, arrastra 17 actividades de Fase 1.</div>
+        <span class="risk-tag">Medio · Verificar con componente técnico</span>
+      </div>
+    </div>
+    <div class="risk-item medio">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">Capacidad de producción comunicacional</div>
+        <div class="risk-desc">El TDR exige especialista en comunicaciones. Las campañas (28 en total, 5-6 piezas c/u) requieren perfil específico que el equipo consultor actual no confirma tener designado.</div>
+        <span class="risk-tag">Medio · Revisar equipo proveedor</span>
+      </div>
+    </div>
+    <div class="risk-item bajo">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">Presupuesto no aprobado formalmente</div>
+        <div class="risk-desc">El presupuesto de S/ 1 030 944 es una "propuesta de presupuesto" del entregable. No hay confirmación de aprobación presupuestal por la Gerencia General o el BID.</div>
+        <span class="risk-tag">Bajo · Confirmar con área de administración</span>
+      </div>
+    </div>
+    <div class="risk-item bajo">
+      <div class="risk-dot"></div>
+      <div>
+        <div class="risk-title">Confidencialidad y propiedad intelectual</div>
+        <div class="risk-desc">Los documentos producidos (narrativa, mapa criticidad, modelo relacionamiento) son propiedad ONP. Deben protegerse ante posibles cambios de consultor.</div>
+        <span class="risk-tag">Bajo · Cláusula XI del TDR activa</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────── ACTIVIDADES ─── -->
+<section id="actividades" class="section">
+  <h2 class="section-h">Actividades por fase y público</h2>
+  <p class="section-sub">Inventario completo de actividades del Plan GC según los TDR, con desglose por fase, público y volumen de ejecución requerido.</p>
+
+  <div class="pill-tabs">
+    <div class="pill active" onclick="filterAct('all',this)">Todas</div>
+    <div class="pill" onclick="filterAct('f1',this)">Fase 1 · Ruta regular</div>
+    <div class="pill" onclick="filterAct('f1i',this)">Fase 1 · Iniciativas</div>
+    <div class="pill" onclick="filterAct('f2',this)">Fase 2</div>
+    <div class="pill" onclick="filterAct('tx',this)">Transversal</div>
+  </div>
+
+  <div class="card">
+  <div class="tbl-wrap">
+  <table id="act-table">
+    <thead><tr><th>Actividad</th><th>Fase</th><th>Público</th><th>Cant.</th><th>Duración</th><th>Línea</th></tr></thead>
+    <tbody>
+      <!-- F1 Ruta regular -->
+      <tr data-fase="f1"><td>Kick Off inicial</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Core + OTI + OIP</td><td>10</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f1"><td>Taller metodologías ágiles</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Core + OTI + OIP</td><td>10</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f1"><td>Coaching grupal de acompañamiento</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Líderes UE + Core</td><td>12</td><td>1h c/u</td><td>Liderazgo</td></tr>
+      <tr data-fase="f1"><td>Reuniones informativas institucionales</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Todos los públicos</td><td>6</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f1"><td>Campañas de sensibilización</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Todos los públicos</td><td>6</td><td>5-6 piezas</td><td>Comunicación</td></tr>
+      <tr data-fase="f1"><td>Cascadeo por líderes</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Líderes de equipos</td><td>6</td><td>1h + encuesta</td><td>Liderazgo</td></tr>
+      <tr data-fase="f1"><td>Espacios de diálogo tempranos (OTI)</td><td><span class="badge badge-f1">F1-Regular</span></td><td>OTI</td><td>8</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f1"><td>Taller alineamiento estratégico (UE)</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Equipo Proyecto</td><td>1</td><td>6h</td><td>Liderazgo</td></tr>
+      <tr data-fase="f1"><td>Sesiones de coaching equipo proyecto</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Equipo Proyecto</td><td>12</td><td>1h c/u</td><td>Liderazgo</td></tr>
+      <tr data-fase="f1"><td>Sesión cocreación reconocimiento</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Equipo Proyecto</td><td>1</td><td>2h</td><td>Capacitación</td></tr>
+      <tr data-fase="f1"><td>Assessment competencias blandas</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Equipo Proyecto</td><td>1</td><td>4h</td><td>Capacitación</td></tr>
+      <tr data-fase="f1"><td>Plan desarrollo competencias (gabinete)</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Equipo Proyecto</td><td>1</td><td>Gabinete</td><td>Capacitación</td></tr>
+      <tr data-fase="f1"><td>Talleres desarrollo competencias</td><td><span class="badge badge-f1">F1-Regular</span></td><td>Equipo Proyecto</td><td>4</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <!-- F1 Iniciativas -->
+      <tr data-fase="f1i"><td>Sesiones de acompañamiento (iniciativas)</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>Core+OTI+OIP part.</td><td>12</td><td>1h c/u</td><td>Liderazgo</td></tr>
+      <tr data-fase="f1i"><td>Kick Off informativo inicial</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>No participantes</td><td>1</td><td>1h</td><td>Comunicación</td></tr>
+      <tr data-fase="f1i"><td>Espacios de diálogo tempranos</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>No participantes</td><td>12</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f1i"><td>Talleres gestión del cambio</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>No participantes</td><td>4</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f1i"><td>Talleres habilidades blandas</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>No participantes</td><td>4</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f1i"><td>Reuniones informativas</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>No participantes</td><td>6</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f1i"><td>Campañas sensibilización</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>No participantes</td><td>6</td><td>5-6 piezas</td><td>Comunicación</td></tr>
+      <tr data-fase="f1i"><td>Talleres de liderazgo</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>No participantes</td><td>4</td><td>2h c/u</td><td>Liderazgo</td></tr>
+      <tr data-fase="f1i"><td>Campañas difusión materiales</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>No participantes</td><td>2</td><td>5-6 piezas</td><td>Comunicación</td></tr>
+      <tr data-fase="f1i"><td>Cascadeo (reuniones)</td><td><span class="badge badge-f1">F1-Iniciativas</span></td><td>Líderes</td><td>6</td><td>1h + encuesta</td><td>Liderazgo</td></tr>
+      <!-- F2 -->
+      <tr data-fase="f2"><td>Kick Off inicial por hito (part.)</td><td><span class="badge badge-f2">Fase 2</span></td><td>Core+OTI+OIP+Trans.</td><td>20</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Taller metodologías ágiles</td><td><span class="badge badge-f2">Fase 2</span></td><td>Participantes</td><td>20</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f2"><td>Coaching grupal</td><td><span class="badge badge-f2">Fase 2</span></td><td>Participantes</td><td>40</td><td>1h c/u</td><td>Liderazgo</td></tr>
+      <tr data-fase="f2"><td>Kick Off informativo por hito (no part.)</td><td><span class="badge badge-f2">Fase 2</span></td><td>No participantes</td><td>4</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Espacios de diálogo</td><td><span class="badge badge-f2">Fase 2</span></td><td>No participantes</td><td>15</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Talleres gestión del cambio</td><td><span class="badge badge-f2">Fase 2</span></td><td>No participantes</td><td>15</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f2"><td>Talleres habilidades blandas</td><td><span class="badge badge-f2">Fase 2</span></td><td>No participantes</td><td>15</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f2"><td>Reuniones informativas por hito</td><td><span class="badge badge-f2">Fase 2</span></td><td>No participantes</td><td>30</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Campañas sensibilización</td><td><span class="badge badge-f2">Fase 2</span></td><td>No participantes</td><td>15</td><td>5-6 piezas</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Talleres de liderazgo</td><td><span class="badge badge-f2">Fase 2</span></td><td>No participantes</td><td>15</td><td>2h c/u</td><td>Liderazgo</td></tr>
+      <tr data-fase="f2"><td>Campañas difusión materiales</td><td><span class="badge badge-f2">Fase 2</span></td><td>No participantes</td><td>5</td><td>5-6 piezas</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Cascadeo por hito</td><td><span class="badge badge-f2">Fase 2</span></td><td>Líderes</td><td>30</td><td>1h + encuesta</td><td>Liderazgo</td></tr>
+      <tr data-fase="f2"><td>Team buildings OTI</td><td><span class="badge badge-f2">Fase 2</span></td><td>OTI</td><td>10</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f2"><td>Inducciones vivenciales OTI</td><td><span class="badge badge-f2">Fase 2</span></td><td>OTI</td><td>5</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f2"><td>Talleres bienestar y estrés OTI</td><td><span class="badge badge-f2">Fase 2</span></td><td>OTI</td><td>15</td><td>2h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f2"><td>Kick Off general áreas transversales</td><td><span class="badge badge-f2">Fase 2</span></td><td>Transversales</td><td>4</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Reuniones informativas periódicas</td><td><span class="badge badge-f2">Fase 2</span></td><td>Transversales</td><td>30</td><td>1h c/u</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Campañas comunicación transversales</td><td><span class="badge badge-f2">Fase 2</span></td><td>Transversales</td><td>15</td><td>5-6 piezas</td><td>Comunicación</td></tr>
+      <tr data-fase="f2"><td>Cascadeo áreas transversales</td><td><span class="badge badge-f2">Fase 2</span></td><td>Transversales</td><td>30</td><td>1h c/u</td><td>Liderazgo</td></tr>
+      <tr data-fase="f2"><td>Team buildings Equipo Proyecto</td><td><span class="badge badge-f2">Fase 2</span></td><td>Equipo Proyecto</td><td>12</td><td>4h c/u</td><td>Capacitación</td></tr>
+      <tr data-fase="f2"><td>Integración Full Day</td><td><span class="badge badge-f2">Fase 2</span></td><td>Equipo Proyecto</td><td>12</td><td>8h c/u</td><td>Capacitación</td></tr>
+      <!-- Transversal -->
+      <tr data-fase="tx"><td>Reuniones coordinación equipo GC</td><td><span class="badge badge-tx">Transversal</span></td><td>Equipo consultor</td><td>3×/semana</td><td>1h c/u</td><td>Coordinación</td></tr>
+      <tr data-fase="tx"><td>Viajes a sedes regionales</td><td><span class="badge badge-tx">Transversal</span></td><td>Equipo consultor</td><td>18 viajes</td><td>—</td><td>Coordinación</td></tr>
+    </tbody>
+  </table>
+  </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────── INDICADORES ─── -->
+<section id="indicadores" class="section">
+  <h2 class="section-h">Sistema de indicadores GC</h2>
+  <p class="section-sub">Las tres dimensiones de medición del Plan — Conocimiento, Aceptación y Compromiso — con herramientas e instrumentos asociados.</p>
+
+  <div class="three-col" style="margin-bottom:24px;">
+    <div style="background:var(--ice);border-radius:var(--r);padding:20px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">📚</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--navy);margin-bottom:8px;">Conocimiento</div>
+      <div style="font-size:12px;color:var(--muted);">Comprensión del propósito, alcance, beneficios e impacto del proyecto en el rol de cada servidor.</div>
+    </div>
+    <div style="background:var(--sage-l);opacity:.8;border-radius:var(--r);padding:20px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">💚</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--navy);margin-bottom:8px;">Aceptación</div>
+      <div style="font-size:12px;color:var(--muted);">Valoración positiva y disposición favorable hacia el proyecto y sus cambios asociados.</div>
+    </div>
+    <div style="background:var(--amber-l);opacity:.8;border-radius:var(--r);padding:20px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:8px;">🤝</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:18px;color:var(--navy);margin-bottom:8px;">Compromiso</div>
+      <div style="font-size:12px;color:var(--muted);">Involucramiento activo — participación, cascadeo efectivo, adopción del cambio en el trabajo cotidiano.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><span class="ico">📐</span> Indicadores por actividad — selección crítica</div>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Actividad</th><th>Indicador ejecución</th><th>Indicador GC</th><th>Herramienta</th></tr></thead>
+      <tbody>
+        <tr><td>Reuniones informativas</td><td>% asistencia · % satisfacción</td><td>% Conocimiento · % Aceptación</td><td>Encuesta post-sesión + asistencia</td></tr>
+        <tr><td>Campañas de sensibilización</td><td>Alcance (visualizaciones) · Interacción</td><td>% Conocimiento · % Aceptación</td><td>Métricas intranet + mini encuesta</td></tr>
+        <tr><td>Cascadeo por líderes</td><td>% equipos con cascadeo · Calidad del cascadeo</td><td>% Conocimiento · % Aceptación · % Compromiso líderes</td><td>Encuesta post-cascadeo (muestral)</td></tr>
+        <tr><td>Kick Off por hito</td><td>% asistencia · % satisfacción (claridad)</td><td>% Conocimiento · % Aceptación</td><td>Encuesta post-sesión</td></tr>
+        <tr><td>Espacios de diálogo</td><td>N° sesiones · N° temas levantados</td><td>Aceptación cualitativa (resistencias)</td><td>Registro cualitativo</td></tr>
+        <tr><td>Coaching grupal</td><td>N° sesiones · Hitos cumplidos</td><td>% Compromiso (participación)</td><td>Bitácora de proyecto</td></tr>
+        <tr><td>Talleres GC</td><td>% asistencia · % satisfacción</td><td>% Conocimiento · % Aceptación</td><td>Encuesta post-taller + registro cualitativo</td></tr>
+        <tr><td>Team buildings OTI</td><td>% participación · % satisfacción</td><td>% Compromiso (participación)</td><td>Registro + encuesta post-actividad</td></tr>
+        <tr><td>Assessment competencias</td><td>% participación del equipo</td><td>N/A directo</td><td>Instrumento assessment + registro</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <div class="card-h"><span class="ico">📊</span> Dashboard de indicadores recomendado (a implementar)</div>
+    <div class="ind-grid">
+      <div class="ind-card"><div class="ind-dim">Conocimiento</div><div class="ind-name">% Conocimiento general del proyecto</div><div class="ind-tool">Encuestas post-RI mensuales · Meta: ≥80% al cierre de cada hito</div></div>
+      <div class="ind-card"><div class="ind-dim">Aceptación</div><div class="ind-name">% Favorabilidad hacia ONP Digital</div><div class="ind-tool">Encuestas post-cascadeo · Meta: ≥70% Fase 1; ≥80% Fase 2</div></div>
+      <div class="ind-card"><div class="ind-dim">Compromiso</div><div class="ind-name">% Cascadeo realizado por líderes</div><div class="ind-tool">Encuestas post-cascadeo · Meta: 100% de líderes en plazo</div></div>
+      <div class="ind-card"><div class="ind-dim">Ejecución</div><div class="ind-name">% Actividades ejecutadas vs planificadas</div><div class="ind-tool">Informe mensual (E2–E43) · Meta: ≥95% mensual</div></div>
+      <div class="ind-card"><div class="ind-dim">Ejecución</div><div class="ind-name">% Cobertura de públicos por hito</div><div class="ind-tool">Registro de asistencia · Meta: 100% áreas impactadas por hito</div></div>
+      <div class="ind-card"><div class="ind-dim">Resistencia</div><div class="ind-name">N° focos de resistencia activos</div><div class="ind-tool">Espacios de diálogo + registro cualitativo · Meta: tendencia a 0</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────── DECISIÓN ─── -->
+<section id="decision" class="section">
+  <h2 class="section-h">Panel de decisión</h2>
+  <p class="section-sub">Análisis de lo que funciona, lo que requiere atención y las acciones decisionales inmediatas para el equipo de la ONP / UE 003.</p>
+
+  <div class="matrix">
+    <div class="mat-cell go">
+      <div class="mat-label">✅ Fortalezas — aprobar y capitalizar</div>
+      <div class="mat-item">Marco metodológico robusto (Kotter, Bridges, ADKAR)</div>
+      <div class="mat-item">Narrativa de ONP Digital finalizada y validada</div>
+      <div class="mat-item">TDR de despliegue completo y listo para proceso de contratación</div>
+      <div class="mat-item">Fichas técnicas de 18 actividades detalladas</div>
+      <div class="mat-item">Modelo de relacionamiento UE3–ONP entregado</div>
+      <div class="mat-item">Equipo UE 003 con clima emocional favorable (mayoría en "Aceptación")</div>
+      <div class="mat-item">Presupuesto de S/ 1 030 944 estructurado y vinculado a actividades</div>
+    </div>
+    <div class="mat-cell risk">
+      <div class="mat-label">🔴 Urgencias — resolver antes de julio 2026</div>
+      <div class="mat-item">Designar formalmente el equipo GC de la UE 003 (líder + roles)</div>
+      <div class="mat-item">Publicar proceso de contratación del proveedor de despliegue</div>
+      <div class="mat-item">Activar estrategia específica para 6 directores opositores</div>
+      <div class="mat-item">Confirmar estado real de iniciativas adelantadas (PAST, Chatbot)</div>
+      <div class="mat-item">Validar y aprobar presupuesto formalmente (BID / Gerencia General)</div>
+    </div>
+    <div class="mat-cell warn">
+      <div class="mat-label">🟡 Acciones de mediano plazo (Q3-Q4 2026)</div>
+      <div class="mat-item">Revisar y sincerar cronograma Fase 1 con hitos SIIP reales</div>
+      <div class="mat-item">Establecer instancia de gobernanza semanal/quincenal GC</div>
+      <div class="mat-item">Ejecutar assessment de competencias del equipo UE 003</div>
+      <div class="mat-item">Implementar plan de fortalecimiento del equipo (7 ejes identificados)</div>
+      <div class="mat-item">Diseñar y lanzar primeras campañas de sensibilización</div>
+      <div class="mat-item">Ejecutar espacios de diálogo OTI (mínimo 1 por equipo)</div>
+    </div>
+    <div class="mat-cell info">
+      <div class="mat-label">📘 Seguimiento continuo (Fase 2 · 2027-2029)</div>
+      <div class="mat-item">Revisar ruta por hito antes de cada sprint de construcción SIIP</div>
+      <div class="mat-item">Actualizar mapa de criticidad de actores semestralmente</div>
+      <div class="mat-item">Mantener dashboard de indicadores con datos mensuales</div>
+      <div class="mat-item">Evaluar rotación de equipo y tomar medidas de transferencia</div>
+      <div class="mat-item">Usar E2–E43 como mecanismo de rendición de cuentas mensual</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <h3 style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--navy);margin-bottom:20px;">Recomendaciones priorizadas</h3>
+
+  <div class="rec-grid">
+    <div class="rec p1">
+      <div class="rec-num">REC 01 · INMEDIATA</div>
+      <div class="rec-title">Posicionar GC como función transversal con autoridad formal</div>
+      <div class="rec-body">La gestión del cambio no debe operar como función de soporte reactivo. Debe designarse un responsable con capacidad de decisión y articulación con todos los componentes de ONP Digital, especialmente el Componente 2.</div>
+      <div class="rec-tag"><span class="badge badge-alto">Urgente</span></div>
+    </div>
+    <div class="rec p2">
+      <div class="rec-num">REC 02 · PRÓXIMAS 4 SEMANAS</div>
+      <div class="rec-title">Activar gobernanza para el despliegue del Plan GC</div>
+      <div class="rec-body">Formalizar estructura de roles, mecanismos de seguimiento, criterios de escalamiento y frecuencia de revisión. La GC no puede depender de dinámicas informales ni de relaciones individuales en un proyecto de 42 meses.</div>
+      <div class="rec-tag"><span class="badge badge-alto">Crítico</span></div>
+    </div>
+    <div class="rec p3">
+      <div class="rec-num">REC 03 · CICLO CONTINUO</div>
+      <div class="rec-title">Usar la Estrategia de Despliegue como herramienta viva</div>
+      <div class="rec-body">Revisar periódicamente en función de la evolución de hitos, nuevos públicos impactados o ajustes al cronograma SIIP. Su valor es como instrumento de planificación adaptativa, no como documento estático.</div>
+      <div class="rec-tag"><span class="badge badge-med">Estratégico</span></div>
+    </div>
+    <div class="rec p4">
+      <div class="rec-num">REC 04 · INMEDIATA</div>
+      <div class="rec-title">Institucionalizar el modelo de relacionamiento UE3–ONP</div>
+      <div class="rec-body">Evitar que la coordinación dependa de vínculos informales. El modelo entregado debe formalizarse con contrapartes designadas, mecanismos de escalamiento y reuniones de sprint funcionando antes del inicio de Fase 1.</div>
+      <div class="rec-tag"><span class="badge badge-ok">Habilitador</span></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:24px;">
+    <div class="card-h"><span class="ico">🏁</span> Conclusión para la toma de decisiones</div>
+    <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;">
+      <strong>El Entregable 4 cumple sustantivamente con los objetivos de la fase de diseño.</strong> El plan está metodológicamente bien construido, los insumos contractuales están listos (TDR, presupuesto, fichas técnicas, indicadores) y el equipo de proyecto tiene un clima emocional favorable para el despliegue.
+    </p>
+    <p style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px;">
+      <strong style="color:var(--rust);">El riesgo principal no es de calidad metodológica, sino de velocidad institucional:</strong> la ONP debe activar la gobernanza interna, publicar el proceso de contratación del proveedor de despliegue y gestionar proactivamente a los actores opositores antes de que comience la Fase 1 en julio 2026. Cada semana de retraso en estas acciones comprime el margen para ejecutar las 17 actividades de Fase 1 antes de fin de año.
+    </p>
+    <p style="font-size:13px;color:var(--text);line-height:1.7;">
+      <strong style="color:var(--sage);">Recomendación de conformidad:</strong> El entregable es apto para su aprobación. Condicionar el pago del 8% final (E44) a la demostración de que las acciones preparatorias de gobernanza han sido formalizadas documentalmente.
+    </p>
+  </div>
+</section>
+
+</div><!-- /.page -->
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  event.preventDefault();
+
+  // Animate progress bars when resumen tab is shown
+  if (id === 'resumen') {
+    setTimeout(() => {
+      document.querySelectorAll('.prog-fill').forEach(b => {
+        const w = b.style.width;
+        b.style.width = '0';
+        setTimeout(() => b.style.width = w, 50);
+      });
+    }, 100);
+  }
+  return false;
+}
+
+function filterAct(fase, el) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#act-table tbody tr').forEach(r => {
+    r.style.display = (fase === 'all' || r.dataset.fase === fase) ? '' : 'none';
+  });
+}
+
+// Animate bars on load
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.prog-fill').forEach(b => {
+      const w = b.style.width;
+      b.style.width = '0';
+      setTimeout(() => b.style.width = w, 200);
+    });
+  }, 400);
+});
+</script>
+</body>
+</html>

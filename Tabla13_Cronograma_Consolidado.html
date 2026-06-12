@@ -213,11 +213,9 @@
       <div class="legend-item"><span class="swatch" style="background:var(--purple)"></span> Áreas transversales de Operación</div>
     </div>
     <div class="note">
-      <strong>Nota sobre el alcance del sombreado:</strong> las barras de avance se reconstruyeron a partir de la
-      imagen de referencia, que cubre únicamente el periodo abril 2026 – diciembre 2027 (2026 + 2027-Hito 1).
-      Para 2028 (Hito 2) y 2029-2030 (Hito 3) solo se mantienen las referencias puntuales que constan en el
-      documento original (Kick off por hito en agosto 2028, y "cuando corresponda" para la difusión de materiales).
-      Si compartes la misma vista para esos periodos, puedo extender el sombreado completo.
+      <strong>Cobertura del sombreado:</strong> las barras de avance reproducen el sombreado de las tres
+      sub-tablas originales (2026–2027 / 2028 / 2029–2030), consolidadas en una sola línea de tiempo de
+      abril 2026 a marzo 2030.
     </div>
   </header>
 
@@ -228,14 +226,16 @@
   </div>
 
   <footer>
-    <p><strong>Lectura del cronograma consolidado:</strong> el primer ciclo (abr. 2026 – dic. 2027) muestra un flujo
-    completo de gestión del cambio: levantamiento y talleres ágiles con las áreas core (mayo–jul. 2027), comunicación
-    institucional sostenida durante todo el periodo (verde), un espacio de diálogo temprano con OTI (may.–jul. 2026),
-    y luego, a partir del kick off por hito (jul.–ago. 2027), el despliegue de talleres, campañas y team buildings
-    que acompañan el cierre del Hito 1 hasta diciembre 2027.</p>
-    <p>Para los Hitos 2 y 3 (2028–2030), el documento original solo fija el kick off por hito (ago. 2028) y la
-    difusión de materiales "cuando corresponda" (ago. 2028 y jun. 2029); el resto de actividades quedaría pendiente
-    de programar siguiendo la misma lógica del primer ciclo.</p>
+    <p><strong>Lectura del cronograma consolidado:</strong> el patrón se repite en cada ciclo de hito. Primero,
+    las áreas core realizan el levantamiento y los talleres ágiles (mayo–jul. del año previo al cierre del hito),
+    mientras la comunicación institucional (verde) se mantiene activa durante todo el ciclo. Luego, en el mes de
+    kick off por hito (jul./ago. 2027, ago. 2028, ago. 2029), se concentra el cierre de pruebas y arranca el
+    despliegue de talleres, campañas de refuerzo, cascadeo y reuniones informativas por hito (gris), así como las
+    actividades de las áreas transversales de operación (morado), que se extienden hasta el cierre del ciclo
+    siguiente. Las actividades OTI (azul) — team buildings, inducciones y bienestar — solo aparecen en el primer
+    ciclo (jul.–sep. 2027).</p>
+    <p>La difusión de materiales de capacitación ("cuando corresponda") se ubica justo antes del kick off de cada
+    hito: oct.–nov. 2027, ago. 2028 y ago. 2029.</p>
     <p>Elaboración propia, a partir del Documento Equivalente N° 15 — Gestión del Cambio (ONP).</p>
   </footer>
 
@@ -287,10 +287,10 @@ const blocks = [
     cls: "block-a",
     publico: "Áreas core (DPR, DPE) + OTI + OIP + áreas transversales con requerimientos",
     rows: [
-      {rol: "Participantes", actividad: "Kick off de pruebas", ranges: [{start:15, end:20, fill:"gray-light"}]},
-      {rol: "Participantes", actividad: "Taller en metodologías ágiles", ranges: [{start:15, end:20, fill:"gray-light"}]},
-      {rol: "Participantes", actividad: "Acompañamiento en pruebas", ranges: [{start:15, end:20, fill:"gray-light"}]},
-      {rol: "Participantes", actividad: "Validación y cierre", ranges: [{start:15, end:20, fill:"gray-light"}]},
+      {rol: "Participantes", actividad: "Kick off de pruebas", ranges: [{start:15, end:20, fill:"gray-light"}, {start:21, end:32, fill:"gray-light"}, {start:33, end:46, fill:"gray-light"}]},
+      {rol: "Participantes", actividad: "Taller en metodologías ágiles", ranges: [{start:15, end:20, fill:"gray-light"}, {start:21, end:32, fill:"gray-light"}, {start:33, end:46, fill:"gray-light"}]},
+      {rol: "Participantes", actividad: "Acompañamiento en pruebas", ranges: [{start:15, end:20, fill:"gray-light"}, {start:21, end:32, fill:"gray-light"}, {start:33, end:46, fill:"gray-light"}]},
+      {rol: "Participantes", actividad: "Validación y cierre", ranges: [{start:15, end:20, fill:"gray-light"}, {start:21, end:32, fill:"gray-light"}, {start:33, end:46, fill:"gray-light"}]},
     ]
   },
   {
@@ -298,18 +298,18 @@ const blocks = [
     publico: "Áreas core (DPR, DPE) + OTI + OIP + áreas transversales con requerimientos",
     rows: [
       {rol: "No participantes (impactados por el hito)", actividad: "Kick off por hito (único)",
-        ranges: [{start:15, end:16, fill:"gray-dark"}, {start:28, end:28, fill:"gray-dark"}]},
-      {rol: "No participantes (impactados por el hito)", actividad: "Espacios de diálogo (segmentados)", ranges: [{start:15, end:18, fill:"gray-light"}]},
-      {rol: "No participantes (impactados por el hito)", actividad: "Talleres de gestión del cambio", ranges: [{start:19, end:20, fill:"gray-light"}]},
-      {rol: "No participantes (impactados por el hito)", actividad: "Talleres de habilidades blandas (según necesidad)", ranges: []},
-      {rol: "No participantes (impactados por el hito)", actividad: "Reuniones informativas por hito", ranges: [{start:17, end:20, fill:"gray-light"}]},
-      {rol: "No participantes (impactados por el hito)", actividad: "Campañas de refuerzo por hito", ranges: [{start:17, end:20, fill:"gray-light"}]},
-      {rol: "No participantes (impactados por el hito)", actividad: "Despliegue de cascadeo", ranges: [{start:17, end:20, fill:"gray-light"}]},
-      {rol: "No participantes (impactados por el hito)", actividad: "Talleres de liderazgo (según necesidad)", ranges: [{start:18, end:20, fill:"gray-light"}]},
+        ranges: [{start:15, end:16, fill:"gray-dark"}, {start:28, end:28, fill:"gray-dark"}, {start:40, end:40, fill:"gray-dark"}]},
+      {rol: "No participantes (impactados por el hito)", actividad: "Espacios de diálogo (segmentados)", ranges: [{start:15, end:18, fill:"gray-light"}, {start:28, end:30, fill:"gray-light"}, {start:40, end:42, fill:"gray-light"}]},
+      {rol: "No participantes (impactados por el hito)", actividad: "Talleres de gestión del cambio", ranges: [{start:19, end:20, fill:"gray-light"}, {start:30, end:32, fill:"gray-light"}, {start:42, end:44, fill:"gray-light"}]},
+      {rol: "No participantes (impactados por el hito)", actividad: "Talleres de habilidades blandas (según necesidad)", ranges: [{start:22, end:24, fill:"gray-light"}, {start:33, end:35, fill:"gray-light"}, {start:45, end:47, fill:"gray-light"}]},
+      {rol: "No participantes (impactados por el hito)", actividad: "Reuniones informativas por hito", ranges: [{start:17, end:20, fill:"gray-light"}, {start:21, end:27, fill:"gray-light"}, {start:29, end:32, fill:"gray-light"}, {start:33, end:39, fill:"gray-light"}, {start:41, end:46, fill:"gray-light"}]},
+      {rol: "No participantes (impactados por el hito)", actividad: "Campañas de refuerzo por hito", ranges: [{start:17, end:20, fill:"gray-light"}, {start:21, end:27, fill:"gray-light"}, {start:29, end:32, fill:"gray-light"}, {start:33, end:39, fill:"gray-light"}, {start:41, end:46, fill:"gray-light"}]},
+      {rol: "No participantes (impactados por el hito)", actividad: "Despliegue de cascadeo", ranges: [{start:17, end:20, fill:"gray-light"}, {start:21, end:27, fill:"gray-light"}, {start:29, end:32, fill:"gray-light"}, {start:33, end:39, fill:"gray-light"}, {start:41, end:46, fill:"gray-light"}]},
+      {rol: "No participantes (impactados por el hito)", actividad: "Talleres de liderazgo (según necesidad)", ranges: [{start:18, end:20, fill:"gray-light"}, {start:30, end:32, fill:"gray-light"}, {start:42, end:44, fill:"gray-light"}]},
       {rol: "No participantes (impactados por el hito)", actividad: "Difusión de materiales de capacitación",
         ranges: [{start:18, end:19, fill:"gray-light", label:"cuando corresponda"},
                  {start:28, end:28, fill:"gray-light", label:"cuando corresponda"},
-                 {start:38, end:38, fill:"gray-light", label:"cuando corresponda"}]},
+                 {start:40, end:40, fill:"gray-light", label:"cuando corresponda"}]},
     ]
   },
   {
@@ -326,9 +326,9 @@ const blocks = [
     publico: "Áreas transversales de Operación",
     rows: [
       {rol: "No participantes", actividad: "Kick off general por hito", ranges: [{start:15, end:15, fill:"purple"}]},
-      {rol: "No participantes", actividad: "Reuniones informativas periódicas", ranges: [{start:16, end:20, fill:"purple"}]},
-      {rol: "No participantes", actividad: "Campañas de comunicación", ranges: [{start:16, end:20, fill:"purple"}]},
-      {rol: "No participantes", actividad: "Despliegue de cascadeo", ranges: [{start:16, end:20, fill:"purple"}]},
+      {rol: "No participantes", actividad: "Reuniones informativas periódicas", ranges: [{start:16, end:20, fill:"purple"}, {start:21, end:27, fill:"purple"}, {start:29, end:32, fill:"purple"}, {start:33, end:39, fill:"purple"}, {start:41, end:46, fill:"purple"}]},
+      {rol: "No participantes", actividad: "Campañas de comunicación", ranges: [{start:16, end:20, fill:"purple"}, {start:21, end:27, fill:"purple"}, {start:29, end:32, fill:"purple"}, {start:33, end:39, fill:"purple"}, {start:41, end:46, fill:"purple"}]},
+      {rol: "No participantes", actividad: "Despliegue de cascadeo", ranges: [{start:16, end:20, fill:"purple"}, {start:21, end:27, fill:"purple"}, {start:29, end:32, fill:"purple"}, {start:33, end:39, fill:"purple"}, {start:41, end:46, fill:"purple"}]},
     ]
   },
 ];
